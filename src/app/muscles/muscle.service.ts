@@ -10,13 +10,13 @@ import { Muscle } from './muscle.model';
 export class MuscleService {
   private readonly apiUrl: string = environment.apiUrl + '/muscles';
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly httpClient: HttpClient) { }
 
   getMuscles(): Observable<Muscle[]> {
-    return this.http.get<Muscle[]>(this.apiUrl);
+    return this.httpClient.get<Muscle[]>(this.apiUrl);
   }
 
   getMuscle(id: string): Observable<Muscle> {
-    return this.http.get<Muscle>(`${this.apiUrl}/${id}`);
+    return this.httpClient.get<Muscle>(`${this.apiUrl}/${id}`);
   }
 }
