@@ -18,7 +18,27 @@ export class ExerciseStoreService {
     ).subscribe();
   }
 
-  get exercises(): Exercise[] {
-    return this._exercises$.getValue();
+  addExercise(exercise: Exercise): void {
+    this.exerciseService.addExercise(exercise).pipe(
+      tap((exercise: Exercise) => this._exercises$.next([...this._exercises$.getValue(), exercise].sort(
+        (a: Exercise, b: Exercise) => a.name.localeCompare(b.name)
+      )))
+    ).subscribe();
+  }
+
+  updateExercise(exercise: Exercise): void {
+    this.exerciseService.updateExercise(exercise).pipe(
+      tap((exercise: Exercise) => this._exercises$.next(this._exercises$.getValue().map(
+        (e: Exercise) => e.id === exercise.id ? exercise : e
+      )))
+    ).subscribe();
+  }
+
+  removeExercise(id: string): void {
+    this.exerciseService.removeExercise(id).pipe(
+      tap(() => this._exercises$.next(this._exercises$.getValue().filter(
+        (exercise: Exercise) => exercise.id !== id
+      )))
+    ).subscribe();
   }
 }
