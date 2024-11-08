@@ -3,7 +3,9 @@
         <tr>
             <th>Name</th>
             <th>Muscles</th>
-            <th></th>
+            <th>
+                <button routerLink="/add-exercise">Add</button>
+            </th>
         </tr>
     </thead>
 
@@ -12,10 +14,9 @@
             <td>{{ exercise.name }}</td>
             <td>{{ formatMuscles(exercise.muscles) }}</td>
             <td>
+                <button [routerLink]="['/update-exercise', exercise.id]">Update</button>
                 <button (click)="onDelete(exercise.id)">Delete</button>
             </td>
         </tr>
     </tbody>
 </table>
-
-<app-add-exercise></app-add-exercise>

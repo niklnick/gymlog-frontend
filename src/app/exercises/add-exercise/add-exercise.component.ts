@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Muscle } from '../../muscles/muscle.model';
 import { MuscleService } from '../../muscles/muscle.service';
@@ -9,7 +10,7 @@ import { ExerciseStoreService } from '../exercise-store.service';
 @Component({
   selector: 'app-add-exercise',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './add-exercise.component.html',
   styleUrl: './add-exercise.component.scss'
 })
@@ -18,6 +19,7 @@ export class AddExerciseComponent implements OnInit {
   muscles$: Observable<Muscle[]> = new Observable<Muscle[]>();
 
   constructor(
+    private readonly router: Router,
     private readonly muscleService: MuscleService,
     private readonly exerciseStoreService: ExerciseStoreService
   ) {
@@ -36,5 +38,7 @@ export class AddExerciseComponent implements OnInit {
 
     this.exerciseStoreService.addExercise(this.addExerciseForm.value);
     this.addExerciseForm.reset();
+
+    this.router.navigate(['exercises']);
   }
 }
