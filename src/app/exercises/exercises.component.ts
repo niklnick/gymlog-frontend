@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Muscle } from '../muscles/muscle.model';
+import { ExerciseStoreService } from './exercise-store.service';
 import { Exercise } from './exercise.model';
-import { ExerciseService } from './exercise.service';
 
 @Component({
   selector: 'app-exercises',
@@ -13,12 +13,14 @@ import { ExerciseService } from './exercise.service';
   styleUrl: './exercises.component.scss'
 })
 export class ExercisesComponent implements OnInit {
-  exercises$: Observable<Exercise[]> = new Observable<Exercise[]>();
+  exercises$: Observable<Exercise[]>;
 
-  constructor(private readonly exerciseService: ExerciseService) { }
+  constructor(private readonly exerciseStoreService: ExerciseStoreService) {
+    this.exercises$ = this.exerciseStoreService.exercises$;
+  }
 
   ngOnInit(): void {
-    this.exercises$ = this.exerciseService.getExercises();
+    this.exerciseStoreService.fetchExercises();
   }
 
   formatMuscles(muscles: Muscle[]): string {
