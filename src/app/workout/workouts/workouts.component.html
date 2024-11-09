@@ -1,0 +1,14 @@
+<table *ngIf="workouts$ | async as workouts">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Exercises</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let workout of workouts">
+            <td>{{ workout.name }}</td>
+            <td>{{ formatWorkoutExercises(workout.workoutExercises) }}</td>
+        </tr>
+    </tbody>
+</table>

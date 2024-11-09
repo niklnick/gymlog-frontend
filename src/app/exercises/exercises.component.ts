@@ -14,14 +14,14 @@ import { Exercise } from './exercise.model';
   styleUrl: './exercises.component.scss'
 })
 export class ExercisesComponent {
-  exercises$: Observable<Exercise[]>;
+  readonly exercises$: Observable<Exercise[]>;
 
   constructor(private readonly exerciseStoreService: ExerciseStoreService) {
     this.exercises$ = this.exerciseStoreService.exercises$;
   }
 
   formatMuscles(muscles: Muscle[]): string {
-    return muscles.map(muscle => muscle.name).join(', ');
+    return muscles.map((muscle: Muscle) => muscle.name).join(', ');
   }
 
   onDelete(id: string): void {

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { MuscleStoreService } from './muscle-store.service';
 import { Muscle } from './muscle.model';
-import { MuscleService } from './muscle.service';
 
 @Component({
   selector: 'app-muscles',
@@ -11,12 +11,10 @@ import { MuscleService } from './muscle.service';
   templateUrl: './muscles.component.html',
   styleUrl: './muscles.component.scss'
 })
-export class MusclesComponent implements OnInit {
-  muscles$: Observable<Muscle[]> = new Observable<Muscle[]>();
+export class MusclesComponent {
+  readonly muscles$: Observable<Muscle[]>;
 
-  constructor(private readonly muscleService: MuscleService) { }
-
-  ngOnInit(): void {
-    this.muscles$ = this.muscleService.getMuscles();
+  constructor(private readonly muscleStoreService: MuscleStoreService) {
+    this.muscles$ = this.muscleStoreService.muscles$;
   }
 }
