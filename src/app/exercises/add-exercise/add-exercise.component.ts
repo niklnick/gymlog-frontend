@@ -36,9 +36,11 @@ export class AddExerciseComponent implements OnInit {
   onSubmit(): void {
     if (this.addExerciseForm.invalid) return;
 
-    this.exerciseStoreService.addExercise(this.addExerciseForm.value);
-    this.addExerciseForm.reset();
-
-    this.router.navigate(['exercises']);
+    this.exerciseStoreService.addExercise(this.addExerciseForm.value).subscribe({
+      complete: () => {
+        this.addExerciseForm.reset();
+        this.router.navigate(['exercises']);
+      }
+    });
   }
 }

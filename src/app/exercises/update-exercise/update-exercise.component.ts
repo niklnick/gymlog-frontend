@@ -38,7 +38,9 @@ export class UpdateExerciseComponent implements OnInit {
     const id: string | null = this.route.snapshot.paramMap.get('id');
     if (id) this.exerciseService.getExercise(id).subscribe((exercise: Exercise) => {
       this.exercise = exercise;
-      this.updateExerciseForm.setValue({ name: this.exercise.name, muscles: this.exercise.muscles });
+      this.updateExerciseForm.setValue({
+        name: this.exercise.name, muscles: this.exercise.muscles
+      });
     });
     this.muscles$ = this.muscleService.getMuscles();
   }
@@ -46,9 +48,13 @@ export class UpdateExerciseComponent implements OnInit {
   onSubmit(): void {
     if (this.updateExerciseForm.invalid) return;
 
-    this.exerciseStoreService.updateExercise({ id: this.exercise.id, ...this.updateExerciseForm.value });
-    this.updateExerciseForm.reset();
-
-    this.router.navigate(['exercises']);
+    this.exerciseStoreService.updateExercise({
+      id: this.exercise.id, ...this.updateExerciseForm.value
+    }).subscribe({
+      complete: () => {
+        this.updateExerciseForm.reset();
+        this.router.navigate(['exercises']);
+      }
+    });
   }
 }

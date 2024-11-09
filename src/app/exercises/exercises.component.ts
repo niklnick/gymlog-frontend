@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Muscle } from '../muscles/muscle.model';
@@ -13,15 +13,11 @@ import { Exercise } from './exercise.model';
   templateUrl: './exercises.component.html',
   styleUrl: './exercises.component.scss'
 })
-export class ExercisesComponent implements OnInit {
+export class ExercisesComponent {
   exercises$: Observable<Exercise[]>;
 
   constructor(private readonly exerciseStoreService: ExerciseStoreService) {
     this.exercises$ = this.exerciseStoreService.exercises$;
-  }
-
-  ngOnInit(): void {
-    this.exerciseStoreService.fetchExercises();
   }
 
   formatMuscles(muscles: Muscle[]): string {
@@ -29,6 +25,6 @@ export class ExercisesComponent implements OnInit {
   }
 
   onDelete(id: string): void {
-    this.exerciseStoreService.removeExercise(id);
+    this.exerciseStoreService.removeExercise(id).subscribe();
   }
 }
