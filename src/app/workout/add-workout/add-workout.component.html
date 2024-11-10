@@ -1,0 +1,15 @@
+<form [formGroup]="addWorkoutForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="name">Name</label>
+        <input formControlName="name" id="name" type="text">
+    </div>
+
+    <div *ngIf="exercises$ | async as exercises">
+        <label for="workoutExercises">Exercises</label>
+        <select formControlName="workoutExercises" id="workoutExercises" multiple>
+            <option *ngFor="let exercise of exercises" [value]="exercise">{{ exercise.name }}</option>
+        </select>
+    </div>
+
+    <button [disabled]="addWorkoutForm.invalid" type="submit">Add Workout</button>
+</form>

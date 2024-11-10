@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MuscleStoreService } from '../../muscles/muscle-store.service';
 import { Muscle } from '../../muscles/muscle.model';
-import { MuscleService } from '../../muscles/muscle.service';
 import { ExerciseStoreService } from '../exercise-store.service';
 import { Exercise } from '../exercise.model';
 import { ExerciseService } from '../exercise.service';
@@ -19,12 +19,12 @@ import { ExerciseService } from '../exercise.service';
 export class UpdateExerciseComponent implements OnInit {
   readonly updateExerciseForm!: FormGroup;
   exercise!: Exercise;
-  muscles$: Observable<Muscle[]> = new Observable<Muscle[]>();
+  muscles$: Observable<Muscle[]>;
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly muscleService: MuscleService,
+    private readonly muscleStoreService: MuscleStoreService,
     private readonly exerciseStoreService: ExerciseStoreService,
     private readonly exerciseService: ExerciseService
   ) {
@@ -32,6 +32,7 @@ export class UpdateExerciseComponent implements OnInit {
       name: new FormControl('', Validators.required),
       muscles: new FormControl([])
     });
+    this.muscles$ = this.muscleStoreService.muscles$;
   }
 
   ngOnInit(): void {
@@ -42,7 +43,6 @@ export class UpdateExerciseComponent implements OnInit {
         name: this.exercise.name, muscles: this.exercise.muscles
       });
     });
-    this.muscles$ = this.muscleService.getMuscles();
   }
 
   onSubmit(): void {

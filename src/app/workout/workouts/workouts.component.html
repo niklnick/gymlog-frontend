@@ -3,12 +3,18 @@
         <tr>
             <th>Name</th>
             <th>Exercises</th>
+            <th>
+                <button routerLink="/add-workout">Add</button>
+            </th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let workout of workouts">
             <td>{{ workout.name }}</td>
             <td>{{ formatWorkoutExercises(workout.workoutExercises) }}</td>
+            <td>
+                <button (click)="onDelete(workout.id)">Delete</button>
+            </td>
         </tr>
     </tbody>
 </table>

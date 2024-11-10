@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MuscleStoreService } from '../../muscles/muscle-store.service';
 import { Muscle } from '../../muscles/muscle.model';
-import { MuscleService } from '../../muscles/muscle.service';
 import { ExerciseStoreService } from '../exercise-store.service';
 
 @Component({
@@ -14,33 +14,26 @@ import { ExerciseStoreService } from '../exercise-store.service';
   templateUrl: './add-exercise.component.html',
   styleUrl: './add-exercise.component.scss'
 })
-export class AddExerciseComponent implements OnInit {
-  readonly addExerciseForm: FormGroup;
-  muscles$: Observable<Muscle[]> = new Observable<Muscle[]>();
+export class AddExerciseComponent {
+  readonly addExerciseForm: FormGroup = new FormGroup({
+    name: new FormControl('', Validators.required),
+    muscles: new FormControl([])
+  });
+  muscles$: Observable<Muscle[]>;
 
   constructor(
     private readonly router: Router,
-    private readonly muscleService: MuscleService,
+    private readonly muscleStoreService: MuscleStoreService,
     private readonly exerciseStoreService: ExerciseStoreService
   ) {
-    this.addExerciseForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      muscles: new FormControl([])
-    });
-  }
-
-  ngOnInit(): void {
-    this.muscles$ = this.muscleService.getMuscles();
+    this.muscles$ = this.muscleStoreService.muscles$;
   }
 
   onSubmit(): void {
     if (this.addExerciseForm.invalid) return;
 
     this.exerciseStoreService.addExercise(this.addExerciseForm.value).subscribe({
-      complete: () => {
-        this.addExerciseForm.reset();
-        this.router.navigate(['exercises']);
-      }
+      complete: () => this.router.navigate(['exercises'])
     });
   }
 }
