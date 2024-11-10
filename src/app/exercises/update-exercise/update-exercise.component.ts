@@ -30,7 +30,8 @@ export class UpdateExerciseComponent implements OnInit {
   ) {
     this.updateExerciseForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      muscles: new FormControl([])
+      primaryMuscles: new FormControl([]),
+      secondaryMuscles: new FormControl([])
     });
     this.muscles$ = this.muscleStoreService.muscles$;
   }
@@ -40,7 +41,9 @@ export class UpdateExerciseComponent implements OnInit {
     if (id) this.exerciseService.getExercise(id).subscribe((exercise: Exercise) => {
       this.exercise = exercise;
       this.updateExerciseForm.setValue({
-        name: this.exercise.name, muscles: this.exercise.muscles
+        name: this.exercise.name,
+        primaryMuscles: this.exercise.primaryMuscles,
+        secondaryMuscles: exercise.secondaryMuscles
       });
     });
   }

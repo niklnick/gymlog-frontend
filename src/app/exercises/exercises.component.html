@@ -2,7 +2,8 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Muscles</th>
+            <th>Primary Muscles</th>
+            <th>Secondary Muscles</th>
             <th>
                 <button routerLink="/add-exercise">Add</button>
             </th>
@@ -12,7 +13,8 @@
     <tbody>
         <tr *ngFor="let exercise of exercises">
             <td>{{ exercise.name }}</td>
-            <td>{{ formatMuscles(exercise.muscles) }}</td>
+            <td>{{ formatMuscles(exercise.primaryMuscles) }}</td>
+            <td>{{ formatMuscles(exercise.secondaryMuscles) }}</td>
             <td>
                 <button [routerLink]="['/update-exercise', exercise.id]">Update</button>
                 <button (click)="onDelete(exercise.id)">Delete</button>

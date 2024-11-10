@@ -4,12 +4,21 @@
         <input formControlName="name" id="name" type="text">
     </div>
 
-    <div *ngIf="muscles$ | async as muscles">
-        <label for="muscles">Muscles</label>
-        <select formControlName="muscles" id="multiple" multiple>
-            <option *ngFor="let muscle of muscles" [value]="muscle">{{ muscle.name }}</option>
-        </select>
-    </div>
+    <ng-container *ngIf="muscles$ | async as muscles">
+        <div>
+            <label for="primaryMuscles">Primary Muscles</label>
+            <select formControlName="primaryMuscles" id="primaryMuscles" multiple>
+                <option *ngFor="let muscle of muscles" [value]="muscle">{{ muscle.name }}</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="secondaryMuscles">Secondary Muscles</label>
+            <select formControlName="secondaryMuscles" id="secondaryMuscles" multiple>
+                <option *ngFor="let muscle of muscles" [value]="muscle">{{ muscle.name }}</option>
+            </select>
+        </div>
+    </ng-container>
 
     <button type="submit" [disabled]="updateExerciseForm.invalid">Update Exercise</button>
 </form>

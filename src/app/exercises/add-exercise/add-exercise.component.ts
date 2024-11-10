@@ -17,7 +17,8 @@ import { ExerciseStoreService } from '../exercise-store.service';
 export class AddExerciseComponent {
   readonly addExerciseForm: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
-    muscles: new FormControl([])
+    primaryMuscles: new FormControl([]),
+    secondaryMuscles: new FormControl([])
   });
   muscles$: Observable<Muscle[]>;
 
