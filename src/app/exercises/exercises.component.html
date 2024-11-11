@@ -19,7 +19,7 @@
             <td>{{ exercise.equipment?.name }}</td>
             <td>
                 <button [routerLink]="['/update-exercise', exercise.id]">Update</button>
-                <button (click)="onDelete(exercise.id)">Delete</button>
+                <button *ngIf="exercise.id" (click)="onDelete(exercise.id)">Delete</button>
             </td>
         </tr>
     </tbody>
