@@ -24,8 +24,12 @@ export class ExerciseStoreService {
     }));
   }
 
-  updateExercise(exercise: Exercise): Observable<Exercise> {
-    return this.exerciseService.updateExercise(exercise).pipe(tap((exercise: Exercise) => {
+  getExercise(id: string): Observable<Exercise> {
+    return this.exerciseService.getExercise(id);
+  }
+
+  updateExercise(id: string, exercise: Exercise): Observable<Exercise> {
+    return this.exerciseService.updateExercise(id, exercise).pipe(tap((exercise: Exercise) => {
       this._exercises$.next(this._exercises$.getValue().map(
         (e: Exercise) => e.id === exercise.id ? exercise : e
       ));

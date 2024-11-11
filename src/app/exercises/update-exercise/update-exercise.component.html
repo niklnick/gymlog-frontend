@@ -1,32 +1,34 @@
 <form [formGroup]="updateExerciseForm" (ngSubmit)="onSubmit()">
     <div>
         <label for="name">Name</label>
-        <input formControlName="name" id="name" type="text">
+        <input autocomplete="off" formControlName="name" id="name" type="text">
     </div>
 
-    <ng-container *ngIf="muscles$ | async as muscles">
-        <div>
-            <label for="primaryMuscles">Primary Muscles</label>
-            <select formControlName="primaryMuscles" id="primaryMuscles" multiple>
-                <option *ngFor="let muscle of muscles" [value]="muscle">{{ muscle.name }}</option>
-            </select>
+    <ng-container *ngIf="muscles$ | async">
+        <div formArrayName="primaryMuscles">
+            <p>Primary Muscles: {{ formatSelectedMuscles(getSelectedMuscles('primaryMuscles')) }}</p>
+            <div *ngFor="let control of getFormArrayControls('primaryMuscles'); let i = index">
+                <input [formControl]="control" [id]="'primary' + i" type="checkbox">
+                <label [for]="'primary' + i">{{ muscles[i].name }}</label>
+            </div>
         </div>
 
-        <div>
-            <label for="secondaryMuscles">Secondary Muscles</label>
-            <select formControlName="secondaryMuscles" id="secondaryMuscles" multiple>
-                <option *ngFor="let muscle of muscles" [value]="muscle">{{ muscle.name }}</option>
-            </select>
+        <div formArrayName="secondaryMuscles">
+            <p>Secondary Muscles: {{ formatSelectedMuscles(getSelectedMuscles('secondaryMuscles')) }}</p>
+            <div *ngFor="let control of getFormArrayControls('secondaryMuscles'); let i = index">
+                <input [formControl]="control" [id]="'secondary' + i" type="checkbox">
+                <label [for]="'secondary' + i">{{ muscles[i].name }}</label>
+            </div>
         </div>
     </ng-container>
 
     <div *ngIf="equipments$ | async as equipments">
         <label for="equipment">Equipment</label>
         <select formControlName="equipment" id="equipment">
-            <option *ngFor="let equipment of equipments" [value]="equipment.id">{{ equipment.name }}</option>
-            <option [value]="null">null</option>
+            <option [value]="null">None</option>
+            <option *ngFor="let equipment of equipments" [ngValue]="equipment">{{ equipment.name }}</option>
         </select>
     </div>
 
-    <button type="submit" [disabled]="updateExerciseForm.invalid">Update Exercise</button>
+    <button [disabled]="updateExerciseForm.invalid" type="submit">Submit</button>
 </form>

@@ -24,8 +24,8 @@ export class ExerciseService {
     return this.httpClient.get<Exercise>(`${this.apiUrl}/${id}`);
   }
 
-  updateExercise(exercise: Exercise): Observable<Exercise> {
-    return this.httpClient.patch<Exercise>(`${this.apiUrl}/${exercise.id}`, exercise);
+  updateExercise(id: string, exercise: Exercise): Observable<Exercise> {
+    return this.httpClient.patch<Exercise>(`${this.apiUrl}/${id}`, exercise);
   }
 
   removeExercise(id: string): Observable<Exercise> {

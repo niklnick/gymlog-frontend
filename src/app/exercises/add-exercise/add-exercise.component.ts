@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { EquipmentStoreService } from '../../equipments/equipment-store.service';
@@ -16,16 +16,11 @@ import { ExerciseStoreService } from '../exercise-store.service';
   templateUrl: './add-exercise.component.html',
   styleUrl: './add-exercise.component.scss'
 })
-export class AddExerciseComponent {
-  readonly addExerciseForm: FormGroup = new FormGroup({
-    name: new FormControl('', Validators.required),
-    primaryMuscles: new FormControl([]),
-    secondaryMuscles: new FormControl([]),
-    equipment: new FormControl(null)
-  });
-  muscles$: Observable<Muscle[]>;
-  equipments$: Observable<Equipment[]>;
-  readonly queryForm: FormControl = new FormControl('');
+export class AddExerciseComponent implements OnInit {
+  readonly equipments$: Observable<Equipment[]>;
+  readonly muscles$: Observable<Muscle[]>;
+  muscles!: Muscle[];
+  addExerciseForm!: FormGroup;
 
   constructor(
     private readonly router: Router,
@@ -33,21 +28,46 @@ export class AddExerciseComponent {
     private readonly muscleStoreService: MuscleStoreService,
     private readonly exerciseStoreService: ExerciseStoreService
   ) {
-    this.muscles$ = this.muscleStoreService.muscles$;
     this.equipments$ = this.equipmentStoreService.equipments$;
+    this.muscles$ = this.muscleStoreService.muscles$;
+  }
+
+  ngOnInit(): void {
+    this.muscles$.subscribe((muscles: Muscle[]) => {
+      this.muscles = muscles;
+      this.addExerciseForm = new FormGroup({
+        name: new FormControl<string>('', Validators.required),
+        primaryMuscles: new FormArray(this.muscles.map(() => new FormControl(false))),
+        secondaryMuscles: new FormArray(this.muscles.map(() => new FormControl(false))),
+        equipment: new FormControl(null)
+      });
+    });
+  }
+
+  getSelectedMuscles(formArrayName: string): Muscle[] {
+    return this.muscles.filter((_, i) => {
+      return (this.addExerciseForm.get(formArrayName) as FormArray).at(i).value;
+    });
+  }
+
+  getFormArrayControls(formArrayName: string): FormControl[] {
+    return (this.addExerciseForm.get(formArrayName) as FormArray).controls as FormControl[];
+  }
+
+  formatSelectedMuscles(muscles: Muscle[]): string {
+    return muscles.map((muscle: Muscle) => muscle.name).join(', ');
   }
 
   onSubmit(): void {
     if (this.addExerciseForm.invalid) return;
 
-    this.exerciseStoreService.addExercise(this.addExerciseForm.value).subscribe({
+    this.exerciseStoreService.addExercise({
+      name: this.addExerciseForm.value.name,
+      primaryMuscles: this.getSelectedMuscles('primaryMuscles'),
+      secondaryMuscles: this.getSelectedMuscles('secondaryMuscles'),
+      equipment: this.addExerciseForm.value.equipment
+    }).subscribe({
       complete: () => this.router.navigate(['exercises'])
-    });
-  }
-
-  searchMuscles(muscles: Muscle[], query: string): Muscle[] {
-    return muscles.filter((muscle: Muscle) => {
-      return muscle.name.toLowerCase().includes(query.toLowerCase());
     });
   }
 }

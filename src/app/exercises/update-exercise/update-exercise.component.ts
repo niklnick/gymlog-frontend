@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { EquipmentStoreService } from '../../equipments/equipment-store.service';
@@ -9,7 +9,6 @@ import { MuscleStoreService } from '../../muscles/muscle-store.service';
 import { Muscle } from '../../muscles/muscle.model';
 import { ExerciseStoreService } from '../exercise-store.service';
 import { Exercise } from '../exercise.model';
-import { ExerciseService } from '../exercise.service';
 
 @Component({
   selector: 'app-update-exercise',
@@ -19,58 +18,77 @@ import { ExerciseService } from '../exercise.service';
   styleUrl: './update-exercise.component.scss'
 })
 export class UpdateExerciseComponent implements OnInit {
-  readonly updateExerciseForm: FormGroup = new FormGroup({
-    name: new FormControl<string>('', Validators.required),
-    primaryMuscles: new FormControl<Muscle[]>([]),
-    secondaryMuscles: new FormControl<Muscle[]>([]),
-    equipment: new FormControl<Equipment | null>(null)
-  });
+  readonly equipments$: Observable<Equipment[]>;
+  readonly muscles$: Observable<Muscle[]>;
+  muscles: Muscle[] = [];
+  exerciseId: string | null = null;
   exercise!: Exercise;
-  muscles$: Observable<Muscle[]>;
-  equipments$: Observable<Equipment[]>;
+  updateExerciseForm!: FormGroup;
 
   constructor(
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly equipmentStoreService: EquipmentStoreService,
     private readonly muscleStoreService: MuscleStoreService,
-    private readonly exerciseStoreService: ExerciseStoreService,
-    private readonly exerciseService: ExerciseService
+    private readonly exerciseStoreService: ExerciseStoreService
   ) {
-    this.muscles$ = this.muscleStoreService.muscles$;
     this.equipments$ = this.equipmentStoreService.equipments$;
+    this.muscles$ = this.muscleStoreService.muscles$;
   }
 
   ngOnInit(): void {
-    const id: string | null = this.route.snapshot.paramMap.get('id');
-    if (id) this.exerciseService.getExercise(id).subscribe((exercise: Exercise) => {
-      this.exercise = exercise;
-      this.updateExerciseForm.setValue({
-        name: this.exercise.name,
-        primaryMuscles: this.exercise.primaryMuscles,
-        secondaryMuscles: exercise.secondaryMuscles,
-        equipment: exercise.equipment
+    this.muscles$.subscribe((muscles: Muscle[]) => {
+      this.muscles = muscles;
+      this.updateExerciseForm = new FormGroup({
+        name: new FormControl<string>('', Validators.required),
+        primaryMuscles: new FormArray(this.muscles.map(() => new FormControl(false))),
+        secondaryMuscles: new FormArray(this.muscles.map(() => new FormControl(false))),
+        equipment: new FormControl(null)
       });
+    });
+
+    this.exerciseId = this.route.snapshot.paramMap.get('id');
+    if (this.exerciseId) {
+      this.exerciseStoreService.getExercise(this.exerciseId).subscribe((exercise: Exercise) => {
+        this.exercise = exercise;
+        this.updateExerciseForm.setValue({
+          name: this.exercise.name,
+          primaryMuscles: this.muscles.map((muscle: Muscle) => {
+            return this.exercise.primaryMuscles.some((m: Muscle) => m.id === muscle.id);
+          }),
+          secondaryMuscles: this.muscles.map((muscle: Muscle) => {
+            return this.exercise.secondaryMuscles.some((m: Muscle) => m.id === muscle.id);
+          }),
+          equipment: exercise.equipment
+        });
+      });
+    }
+  }
+
+  getSelectedMuscles(formArrayName: string): Muscle[] {
+    return this.muscles.filter((_, i) => {
+      return (this.updateExerciseForm.get(formArrayName) as FormArray).at(i).value;
     });
   }
 
+  getFormArrayControls(formArrayName: string): FormControl[] {
+    return (this.updateExerciseForm.get(formArrayName) as FormArray).controls as FormControl[];
+  }
+
+  formatSelectedMuscles(muscles: Muscle[]): string {
+    return muscles.map((muscle: Muscle) => muscle.name).join(', ');
+  }
+
   onSubmit(): void {
-    if (this.updateExerciseForm.invalid) return;
+    if (!this.exerciseId || this.updateExerciseForm.invalid) return;
 
-    console.log({
-      ...this.updateExerciseForm.value,
-      equipment: { id: this.updateExerciseForm.value.equipment },
-    });
-
-    this.exerciseStoreService.updateExercise({
-      ...this.updateExerciseForm.value,
-      id: this.exercise.id,
-      equipment: { id: this.updateExerciseForm.value.equipment },
+    this.exerciseStoreService.updateExercise(this.exerciseId, {
+      name: this.updateExerciseForm.value.name,
+      primaryMuscles: this.getSelectedMuscles('primaryMuscles'),
+      secondaryMuscles: this.getSelectedMuscles('secondaryMuscles'),
+      equipment: this.updateExerciseForm.value.equipment
     }).subscribe({
-      complete: () => {
-        this.updateExerciseForm.reset();
-        this.router.navigate(['exercises']);
-      }
+      complete: () => this.router.navigate(['exercises'])
     });
   }
 }
