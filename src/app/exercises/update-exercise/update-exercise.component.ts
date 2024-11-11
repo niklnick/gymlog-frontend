@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { EquipmentStoreService } from '../../equipments/equipment-store.service';
+import { Equipment } from '../../equipments/equipment.model';
 import { MuscleStoreService } from '../../muscles/muscle-store.service';
 import { Muscle } from '../../muscles/muscle.model';
 import { ExerciseStoreService } from '../exercise-store.service';
@@ -17,23 +19,26 @@ import { ExerciseService } from '../exercise.service';
   styleUrl: './update-exercise.component.scss'
 })
 export class UpdateExerciseComponent implements OnInit {
-  readonly updateExerciseForm!: FormGroup;
+  readonly updateExerciseForm: FormGroup = new FormGroup({
+    name: new FormControl<string>('', Validators.required),
+    primaryMuscles: new FormControl<Muscle[]>([]),
+    secondaryMuscles: new FormControl<Muscle[]>([]),
+    equipment: new FormControl<Equipment | null>(null)
+  });
   exercise!: Exercise;
   muscles$: Observable<Muscle[]>;
+  equipments$: Observable<Equipment[]>;
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly equipmentStoreService: EquipmentStoreService,
     private readonly muscleStoreService: MuscleStoreService,
     private readonly exerciseStoreService: ExerciseStoreService,
     private readonly exerciseService: ExerciseService
   ) {
-    this.updateExerciseForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      primaryMuscles: new FormControl([]),
-      secondaryMuscles: new FormControl([])
-    });
     this.muscles$ = this.muscleStoreService.muscles$;
+    this.equipments$ = this.equipmentStoreService.equipments$;
   }
 
   ngOnInit(): void {
@@ -43,7 +48,8 @@ export class UpdateExerciseComponent implements OnInit {
       this.updateExerciseForm.setValue({
         name: this.exercise.name,
         primaryMuscles: this.exercise.primaryMuscles,
-        secondaryMuscles: exercise.secondaryMuscles
+        secondaryMuscles: exercise.secondaryMuscles,
+        equipment: exercise.equipment
       });
     });
   }
@@ -51,8 +57,15 @@ export class UpdateExerciseComponent implements OnInit {
   onSubmit(): void {
     if (this.updateExerciseForm.invalid) return;
 
+    console.log({
+      ...this.updateExerciseForm.value,
+      equipment: { id: this.updateExerciseForm.value.equipment },
+    });
+
     this.exerciseStoreService.updateExercise({
-      id: this.exercise.id, ...this.updateExerciseForm.value
+      ...this.updateExerciseForm.value,
+      id: this.exercise.id,
+      equipment: { id: this.updateExerciseForm.value.equipment },
     }).subscribe({
       complete: () => {
         this.updateExerciseForm.reset();

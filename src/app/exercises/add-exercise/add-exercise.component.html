@@ -6,19 +6,24 @@
 
     <ng-container *ngIf="muscles$ | async as muscles">
         <div>
-            <label for="primaryMuscles">Primary Muscles</label>
-            <select formControlName="primaryMuscles" id="primaryMuscles" multiple>
-                <option *ngFor="let muscle of muscles" [value]="muscle">{{ muscle.name }}</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="secondaryMuscles">Secondary Muscles</label>
-            <select formControlName="secondaryMuscles" id="secondaryMuscles" multiple>
-                <option *ngFor="let muscle of muscles" [value]="muscle">{{ muscle.name }}</option>
-            </select>
+            <input [formControl]="queryForm" type="search">
+            <ul>
+                <li *ngFor="let muscle of searchMuscles(muscles, queryForm.value)" [value]="muscle">
+                    {{ muscle.name }}
+                </li>
+            </ul>
         </div>
     </ng-container>
+
+    <div *ngIf="equipments$ | async as equipments">
+        <label for="equipment">Equipment</label>
+        <select formControlName="equipment" id="equipment">
+            <option *ngFor="let equipment of equipments" [value]="equipment">
+                {{ equipment.name }}
+            </option>
+            <option [value]="null">null</option>
+        </select>
+    </div>
 
     <button type="submit" [disabled]="addExerciseForm.invalid">Add Exercise</button>
 </form>

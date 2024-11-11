@@ -20,5 +20,13 @@
         </div>
     </ng-container>
 
+    <div *ngIf="equipments$ | async as equipments">
+        <label for="equipment">Equipment</label>
+        <select formControlName="equipment" id="equipment">
+            <option *ngFor="let equipment of equipments" [value]="equipment.id">{{ equipment.name }}</option>
+            <option [value]="null">null</option>
+        </select>
+    </div>
+
     <button type="submit" [disabled]="updateExerciseForm.invalid">Update Exercise</button>
 </form>

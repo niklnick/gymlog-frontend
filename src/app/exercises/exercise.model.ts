@@ -1,3 +1,4 @@
+import { Equipment } from "../equipments/equipment.model";
 import { Muscle } from "../muscles/muscle.model";
 
 export interface Exercise {
@@ -5,4 +6,5 @@ export interface Exercise {
     readonly name: string;
     readonly primaryMuscles: Muscle[];
     readonly secondaryMuscles: Muscle[];
+    readonly equipment: Equipment | null;
 }
