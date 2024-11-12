@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Muscle } from '../../muscles/muscle.model';
 
 @Component({
   selector: 'app-select',
@@ -10,25 +9,29 @@ import { Muscle } from '../../muscles/muscle.model';
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss'
 })
-export class SelectComponent {
-  readonly mockMuscles: Muscle[] = [
-    { id: '1', name: 'Biceps' },
-    { id: '2', name: 'Deltoids' },
-    { id: '3', name: 'Pectoralis' },
-    { id: '4', name: 'Triceps' }
-  ];
-  readonly selectForm: FormGroup = new FormGroup({
-    options: new FormArray(this.mockMuscles.map(() => new FormControl(false)))
-  });
+export class SelectComponent implements OnChanges {
+  @Input() options: any[] = [];
+
+  readonly selectForm: FormGroup = new FormGroup({ options: new FormArray([]) });
 
   isCollapsed: boolean = true;
 
-  get selected(): Muscle[] {
-    return this.mockMuscles.filter((_, i) => (this.selectForm.get('options') as FormArray).at(i).value);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options']) this.initOptionsFormArray();
+  }
+
+  private initOptionsFormArray(): void {
+    const optionsFormArray: FormArray = this.selectForm.get('options') as FormArray;
+    optionsFormArray.clear();
+    this.options.forEach(() => optionsFormArray.push(new FormControl(false)));
+  }
+
+  get selected(): any[] {
+    return this.options.filter((_, i) => (this.selectForm.get('options') as FormArray).at(i).value);
   }
 
   get formatSelected(): string {
-    return this.selected.map((muscle: Muscle) => muscle.name).join(', ');
+    return this.selected.map((option: any) => option.name).join(', ');
   }
 
   onToggle(): void {

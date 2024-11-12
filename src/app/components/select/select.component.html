@@ -5,7 +5,7 @@
     </div>
 
     <div formArrayName="options" *ngIf="!isCollapsed" id="body">
-        <div class="option" *ngFor="let muscle of mockMuscles; let i = index">
+        <div class="option" *ngFor="let muscle of options; let i = index">
             <input [formControlName]="i" [id]="i" type="checkbox">
             <label [for]="i">{{ muscle.name }}</label>
         </div>
