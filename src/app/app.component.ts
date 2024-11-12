@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { SelectComponent } from './components/select/select.component';
 import { MuscleStoreService } from './muscles/muscle-store.service';
 import { Muscle } from './muscles/muscle.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, DropdownComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterOutlet, SelectComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

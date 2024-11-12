@@ -6,13 +6,13 @@ form {
         border: 1px solid;
         display: flex;
 
-        #title {
-            flex-grow: 1;
-        }
-
         &:hover {
             background: hsl(0, 0%, 20%);
             cursor: pointer;
+        }
+
+        #title {
+            flex-grow: 1;
         }
     }
 
@@ -22,17 +22,16 @@ form {
         .option {
             display: flex;
 
-            input {
-                display: none;
+            * {
+                cursor: pointer;
             }
 
             label {
                 flex-grow: 1;
+            }
 
-                &:hover {
-                    background: hsl(0, 0%, 20%);
-                    cursor: pointer;
-                }
+            &:hover {
+                background: hsl(0, 0%, 20%);
             }
         }
     }

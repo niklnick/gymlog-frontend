@@ -1,0 +1,13 @@
+<form [formGroup]="selectForm">
+    <div (click)="onToggle()" id="header">
+        <span id="title">{{ selected.length > 0 ? formatSelected : 'Select' }}</span>
+        <span class="material-symbols-rounded">{{ isCollapsed ? 'arrow_drop_down' : 'arrow_drop_up' }}</span>
+    </div>
+
+    <div formArrayName="options" *ngIf="!isCollapsed" id="body">
+        <div class="option" *ngFor="let muscle of mockMuscles; let i = index">
+            <input [formControlName]="i" [id]="i" type="checkbox">
+            <label [for]="i">{{ muscle.name }}</label>
+        </div>
+    </div>
+</form>
