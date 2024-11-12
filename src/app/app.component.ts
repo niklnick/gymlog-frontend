@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SelectComponent } from './components/select/select.component';
@@ -16,8 +16,13 @@ import { Muscle } from './muscles/muscle.model';
 })
 export class AppComponent {
   readonly muscles$: Observable<Muscle[]>;
+  readonly musclesForm: FormGroup = new FormGroup({ muscles: new FormControl<Muscle[]>([]) });
 
   constructor(private readonly muscleStoreService: MuscleStoreService) {
     this.muscles$ = this.muscleStoreService.muscles$;
+  }
+
+  onSelectedChange(selected: Muscle[]): void {
+    (this.musclesForm.get('muscles') as FormControl<Muscle[]>).setValue(selected);
   }
 }
