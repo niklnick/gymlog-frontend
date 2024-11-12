@@ -36,7 +36,7 @@ export class AddExerciseComponent implements OnInit {
     this.muscles$.subscribe((muscles: Muscle[]) => {
       this.muscles = muscles;
       this.addExerciseForm = new FormGroup({
-        name: new FormControl<string>('', Validators.required),
+        name: new FormControl('', Validators.required),
         primaryMuscles: new FormArray(this.muscles.map(() => new FormControl(false))),
         secondaryMuscles: new FormArray(this.muscles.map(() => new FormControl(false))),
         equipment: new FormControl(null)

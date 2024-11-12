@@ -1,0 +1,39 @@
+form {
+    width: 160px;
+
+    #header {
+        align-items: center;
+        border: 1px solid;
+        display: flex;
+
+        #title {
+            flex-grow: 1;
+        }
+
+        &:hover {
+            background: hsl(0, 0%, 20%);
+            cursor: pointer;
+        }
+    }
+
+    #body {
+        border: 1px solid;
+
+        .option {
+            display: flex;
+
+            input {
+                display: none;
+            }
+
+            label {
+                flex-grow: 1;
+
+                &:hover {
+                    background: hsl(0, 0%, 20%);
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
