@@ -1,1 +1,14 @@
-<router-outlet />
+<header>
+    <h1>gymlog</h1>
+
+    <nav>
+        <div class="tab" *ngFor="let tab of tabs" [routerLink]="tab.path" routerLinkActive="active">
+            <span class="material-symbols-rounded">{{ tab.iconName }}</span>
+            <span class="label">{{ tab.label }}</span>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <router-outlet></router-outlet>
+</main>

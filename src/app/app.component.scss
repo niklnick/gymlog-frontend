@@ -1,0 +1,59 @@
+$spacing: 8px;
+
+:host {
+    display: flex;
+    min-height: calc(100% - 2 * $spacing);
+    gap: $spacing;
+    padding: $spacing;
+
+    header,
+    main {
+        border-radius: $spacing;
+    }
+
+    header {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing;
+
+        h1 {
+            padding: $spacing;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: $spacing;
+
+            .tab {
+                align-items: center;
+                border-radius: $spacing;
+                display: flex;
+                gap: $spacing;
+                padding: $spacing;
+
+                &.active {
+                    background: hsl(0, 0, 87.5%);
+                    color: black;
+                }
+
+                &:hover:not(.active) {
+                    background: hsl(0, 0%, 25%);
+                    cursor: pointer;
+                }
+
+                &:active:not(.active) {
+                    background: hsl(0, 0%, 37.5%);
+                }
+
+                .label {
+                    padding-inline: $spacing;
+                }
+            }
+        }
+    }
+
+    main {
+        flex-grow: 1;
+    }
+}
