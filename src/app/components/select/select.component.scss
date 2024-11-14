@@ -1,38 +1,25 @@
-form {
+:host {
+    display: flex;
+    flex-direction: column;
     width: 160px;
 
     #header {
-        align-items: center;
         border: 1px solid;
-        display: flex;
 
         &:hover {
             background: hsl(0, 0%, 20%);
             cursor: pointer;
         }
-
-        #title {
-            flex-grow: 1;
-        }
     }
 
     #body {
         border: 1px solid;
+        display: flex;
+        flex-direction: column;
 
-        .option {
-            display: flex;
-
-            * {
-                cursor: pointer;
-            }
-
-            label {
-                flex-grow: 1;
-            }
-
-            &:hover {
-                background: hsl(0, 0%, 20%);
-            }
+        .option:hover {
+            background: hsl(0, 0%, 20%);
+            cursor: pointer;
         }
     }
 }

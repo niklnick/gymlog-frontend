@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-select',
@@ -9,42 +9,29 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss'
 })
-export class SelectComponent implements OnInit, OnChanges {
-  @Input() options: any[] = [];
-  @Output() selectedChange: EventEmitter<any[]> = new EventEmitter<any[]>();
+export class SelectComponent<T> {
+  @Input({ required: true }) options: T[] = [];
+  @Input({ required: true }) labelKey!: keyof T;
 
-  readonly selectForm: FormGroup = new FormGroup({ options: new FormArray([]) });
+  @Output() readonly select: EventEmitter<T[]> = new EventEmitter<T[]>();
 
-  isCollapsed: boolean = true;
+  isExpanded: boolean = false;
 
-  ngOnInit(): void {
-    this.optionsFormArray.valueChanges.subscribe((values: boolean[]) => {
-      if (values.length === this.options.length) this.selectedChange.emit(this.selected);
-    });
+  private selected: T[] = [];
+
+  get title(): string {
+    return this.selected.length > 0 ?
+      this.selected.map((selected: T) => selected[this.labelKey]).join(', ') : 'Select';
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['options']) this.initOptionsFormArray();
+  isSelected(option: T): boolean {
+    return this.selected.includes(option);
   }
 
-  private initOptionsFormArray(): void {
-    this.optionsFormArray.clear();
-    this.options.forEach(() => this.optionsFormArray.push(new FormControl(false)));
-  }
+  onSelect(option: T): void {
+    this.selected = this.selected.includes(option) ?
+      this.selected.filter((selected: T) => selected !== option) : [...this.selected, option];
 
-  get optionsFormArray(): FormArray {
-    return this.selectForm.get('options') as FormArray;
-  }
-
-  get selected(): any[] {
-    return this.options.filter((_, i) => this.optionsFormArray.at(i).value);
-  }
-
-  get formatSelected(): string {
-    return this.selected.map((option: any) => option.name).join(', ');
-  }
-
-  onToggle(): void {
-    this.isCollapsed = !this.isCollapsed;
+    this.select.emit(this.selected);
   }
 }

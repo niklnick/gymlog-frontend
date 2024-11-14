@@ -1,13 +1,10 @@
-<form [formGroup]="selectForm">
-    <div (click)="onToggle()" id="header">
-        <span id="title">{{ selected.length > 0 ? formatSelected : 'Select' }}</span>
-        <span class="material-symbols-rounded">{{ isCollapsed ? 'arrow_drop_down' : 'arrow_drop_up' }}</span>
-    </div>
+<div id="header" (click)="isExpanded = !isExpanded">
+    <span>{{ title }}</span>
+</div>
 
-    <div formArrayName="options" *ngIf="!isCollapsed" id="body">
-        <div class="option" *ngFor="let muscle of options; let i = index">
-            <input [formControlName]="i" [id]="i" type="checkbox">
-            <label [for]="i">{{ muscle.name }}</label>
-        </div>
-    </div>
-</form>
+<div *ngIf="isExpanded" id="body">
+    <label class="option" *ngFor="let option of options">
+        <input [checked]="isSelected(option)" (click)="onSelect(option)" type="checkbox">
+        <span>{{ option[labelKey] }}</span>
+    </label>
+</div>

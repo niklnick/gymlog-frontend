@@ -1,5 +1,1 @@
 <router-outlet />
-
-<form [formGroup]="musclesForm" *ngIf="muscles$ | async as muscles">
-    <app-select [options]="muscles" (selectedChange)="onSelectedChange($event)"></app-select>
-</form>
