@@ -12,7 +12,7 @@ export class ExerciseService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  addExercise(exercise: Exercise): Observable<Exercise> {
+  addExercise(exercise: Omit<Exercise, 'id'>): Observable<Exercise> {
     return this.httpClient.post<Exercise>(this.apiUrl, exercise);
   }
 
@@ -24,7 +24,7 @@ export class ExerciseService {
     return this.httpClient.get<Exercise>(`${this.apiUrl}/${id}`);
   }
 
-  updateExercise(id: string, exercise: Exercise): Observable<Exercise> {
+  updateExercise(id: string, exercise: Omit<Exercise, 'id'>): Observable<Exercise> {
     return this.httpClient.patch<Exercise>(`${this.apiUrl}/${id}`, exercise);
   }
 

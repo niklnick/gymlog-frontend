@@ -16,7 +16,7 @@ export class ExerciseStoreService {
     });
   }
 
-  addExercise(exercise: Exercise): Observable<Exercise> {
+  addExercise(exercise: Omit<Exercise, 'id'>): Observable<Exercise> {
     return this.exerciseService.addExercise(exercise).pipe(tap((exercise: Exercise) => {
       this._exercises$.next([...this._exercises$.getValue(), exercise].sort(
         (a: Exercise, b: Exercise) => a.name.localeCompare(b.name)
@@ -28,7 +28,7 @@ export class ExerciseStoreService {
     return this.exerciseService.getExercise(id);
   }
 
-  updateExercise(id: string, exercise: Exercise): Observable<Exercise> {
+  updateExercise(id: string, exercise: Omit<Exercise, 'id'>): Observable<Exercise> {
     return this.exerciseService.updateExercise(id, exercise).pipe(tap((exercise: Exercise) => {
       this._exercises$.next(this._exercises$.getValue().map(
         (e: Exercise) => e.id === exercise.id ? exercise : e

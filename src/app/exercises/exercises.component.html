@@ -1,26 +1,44 @@
-<table *ngIf="exercises$ | async as exercises">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Primary Muscles</th>
-            <th>Secondary Muscles</th>
-            <th>Equipment</th>
-            <th>
-                <button routerLink="/add-exercise">Add</button>
-            </th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <tr *ngFor="let exercise of exercises">
-            <td>{{ exercise.name }}</td>
-            <td>{{ formatMuscles(exercise.primaryMuscles) }}</td>
-            <td>{{ formatMuscles(exercise.secondaryMuscles) }}</td>
-            <td>{{ exercise.equipment?.name }}</td>
-            <td>
-                <button [routerLink]="['/update-exercise', exercise.id]">Update</button>
-                <button *ngIf="exercise.id" (click)="onDelete(exercise.id)">Delete</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<ng-container *ngIf="exercises$ | async as exercises">
+    <header>
+        <h2>All Exercises</h2>
+        <div id="actions">
+            <input id="search" placeholder="Search Exercises" type="search">
+            <button>
+                <span class="material-symbols-rounded">tune</span>
+                <span>Filter Exercises</span>
+            </button>
+            <button routerLink="/add-exercise">
+                <span class="material-symbols-rounded">add</span>
+                <span>Add Exercise</span>
+            </button>
+        </div>
+    </header>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Muscles</th>
+                <th>Equipment</th>
+                <th class="row-actions-header"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let exercise of exercises">
+                <td>{{ exercise.name }}</td>
+                <td>
+                    <p class="primary-muscles">{{ formatMuscles(exercise.primaryMuscles) }}</p>
+                    <p class="secondary-muscles">{{ formatMuscles(exercise.secondaryMuscles) }}</p>
+                </td>
+                <td>{{ exercise.equipment?.name }}</td>
+                <td class="row-actions">
+                    <button [routerLink]="['/update-exercise', exercise.id]">
+                        <span class="material-symbols-rounded">edit</span>
+                    </button>
+                    <button (click)="onDelete(exercise.id)">
+                        <span class="material-symbols-rounded">delete</span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</ng-container>
