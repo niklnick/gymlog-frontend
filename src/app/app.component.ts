@@ -2,6 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+interface Tab {
+  readonly path: string;
+  readonly label: string;
+  readonly iconName: string;
+}
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -10,5 +16,8 @@ import { RouterModule } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  tabs: string[] = ['workouts', 'exercises'];
+  tabs: Tab[] = [
+    { path: 'workouts', label: 'Workouts', iconName: 'list_alt' },
+    { path: 'exercises', label: 'Exercises', iconName: 'exercise' }
+  ];
 }

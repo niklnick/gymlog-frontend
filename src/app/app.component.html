@@ -1,13 +1,16 @@
 <header>
     <h1>gymlog</h1>
 </header>
-<section>
+<main>
     <nav>
-        <div class="tab" *ngFor="let tab of tabs">
-            <a [routerLink]="tab">{{ tab }}</a>
-        </div>
+        <ng-container *ngFor="let tab of tabs">
+            <a class="tab" [routerLink]="tab.path" routerLinkActive="active">
+                <span class="material-symbols-outlined">{{ tab.iconName }}</span>
+                <span>{{ tab.label }}</span>
+            </a>
+        </ng-container>
     </nav>
     <article>
         <router-outlet></router-outlet>
     </article>
-</section>
+</main>
