@@ -1,11 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
 html,
 body {
+    height: 100%;
+}
+
+body,
+button,
+input,
+select {
     background: hsl(0, 0%, 6.25%);
     color: hsl(0, 0%, 87.5%);
-    font-family: 'Roboto';
-    height: 100%;
+    font-family: 'Montserrat';
 }
 
 body,
@@ -20,6 +24,29 @@ p {
     margin: 0;
 }
 
-input {
-    cursor: pointer;
+input,
+button,
+select {
+    border: 1px solid gray;
+    border-radius: 4px;
+    font-size: 1em;
+    padding: 4px;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:hover:not(:disabled) {
+        background: hsl(0, 0%, 12.5%);
+    }
+
+    &:active:not(:disabled) {
+        background: hsl(0, 0%, 25%);
+    }
+
+    &:disabled {
+        background: hsl(0, 0%, 25%);
+        border: 1px solid hsl(0, 0%, 25%);
+        color: gray;
+    }
 }

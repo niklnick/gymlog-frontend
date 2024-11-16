@@ -1,16 +1,43 @@
 import { Routes } from '@angular/router';
-import { AddExerciseComponent } from './exercises/add-exercise/add-exercise.component';
-import { ExercisesComponent } from './exercises/exercises.component';
-import { UpdateExerciseComponent } from './exercises/update-exercise/update-exercise.component';
-import { MusclesComponent } from './muscles/muscles.component';
-import { AddWorkoutComponent } from './workout/add-workout/add-workout.component';
-import { WorkoutsComponent } from './workout/workouts/workouts.component';
+import { AddExerciseComponent } from './features/exercises/add-exercise/add-exercise.component';
+import { ExerciseListComponent } from './features/exercises/exercise-list/exercise-list.component';
+import { ExercisesComponent } from './features/exercises/exercises.component';
+import { UpdateExerciseComponent } from './features/exercises/update-exercise/update-exercise.component';
+import { AddWorkoutComponent } from './features/workouts/add-workout/add-workout.component';
+import { WorkoutListComponent } from './features/workouts/workout-list/workout-list.component';
+import { WorkoutsComponent } from './features/workouts/workouts.component';
 
 export const routes: Routes = [
-    { path: 'add-exercise', component: AddExerciseComponent },
-    { path: 'exercises', component: ExercisesComponent },
-    { path: 'update-exercise/:id', component: UpdateExerciseComponent },
-    { path: 'muscles', component: MusclesComponent },
-    { path: 'add-workout', component: AddWorkoutComponent },
-    { path: 'workouts', component: WorkoutsComponent }
+    {
+        path: 'exercises',
+        component: ExercisesComponent,
+        children: [
+            {
+                path: '',
+                component: ExerciseListComponent
+            },
+            {
+                path: 'add-exercise',
+                component: AddExerciseComponent
+            },
+            {
+                path: 'update-exercise/:id',
+                component: UpdateExerciseComponent
+            }
+        ]
+    },
+    {
+        path: 'workouts',
+        component: WorkoutsComponent,
+        children: [
+            {
+                path: '',
+                component: WorkoutListComponent
+            },
+            {
+                path: 'add-workout',
+                component: AddWorkoutComponent
+            }
+        ]
+    }
 ];

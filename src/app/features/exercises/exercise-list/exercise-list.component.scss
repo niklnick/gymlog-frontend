@@ -1,0 +1,53 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    header {
+        display: flex;
+        justify-content: space-between;
+
+        aside {
+            display: flex;
+            gap: 8px;
+        }
+    }
+
+    table {
+        border-collapse: collapse;
+        table-layout: fixed;
+
+        tr {
+            border: 1px solid grey;
+        }
+
+        th,
+        td {
+            padding: 8px;
+        }
+
+        th {
+            text-align: left;
+        }
+
+        tbody {
+            tr {
+                height: 100%;
+                cursor: pointer;
+
+                &:hover {
+                    background: hsl(0, 0%, 12.5%);
+                }
+            }
+
+            .secondary {
+                color: gray;
+            }
+
+            .row-actions {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+}

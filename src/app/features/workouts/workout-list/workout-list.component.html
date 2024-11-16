@@ -1,0 +1,22 @@
+<header>
+    <h2>Workouts</h2>
+    <aside>
+        <input placeholder="Search Workouts" id="search" type="search">
+        <button routerLink="add-workout">Add Workout</button>
+    </aside>
+</header>
+<table *ngIf="workouts$ | async as workouts">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Exercises</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let workout of workouts">
+            <th>{{ workout.name }}</th>
+            <th>{{ formatWorkoutExercises(workout.workoutExercises) }}</th>
+        </tr>
+    </tbody>
+</table>

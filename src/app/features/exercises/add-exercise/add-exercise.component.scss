@@ -1,0 +1,21 @@
+#muscles {
+    display: flex;
+    gap: 8px;
+
+    .select {
+        border: 1px solid gray;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+
+        .option {
+            cursor: pointer;
+            padding: 4px;
+
+            &:hover {
+                background: hsl(0, 0%, 12.5%);
+            }
+        }
+    }
+}

@@ -1,0 +1,31 @@
+<header>
+    <h2>Exercises</h2>
+    <aside>
+        <input placeholder="Search Exercises" id="search" type="search">
+        <button routerLink="add-exercise">Add Exercise</button>
+    </aside>
+</header>
+<table *ngIf="exercises$ | async as exercises">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Muscles</th>
+            <th>Equipment</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let exercise of exercises">
+            <th>{{ exercise.name }}</th>
+            <td>
+                <p>{{ formatMuscles(exercise.primaryMuscles) }}</p>
+                <p class="secondary">{{ formatMuscles(exercise.secondaryMuscles) }}</p>
+            </td>
+            <td>{{ exercise.equipment?.name }}</td>
+            <td class="row-actions">
+                <button [routerLink]="['update-exercise', exercise.id]">Edit</button>
+                <button (click)="onDelete(exercise.id)">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

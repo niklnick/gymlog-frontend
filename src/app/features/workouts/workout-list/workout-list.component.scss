@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    header {
+        display: flex;
+        justify-content: space-between;
+
+        aside {
+            display: flex;
+            gap: 8px;
+        }
+    }
+}

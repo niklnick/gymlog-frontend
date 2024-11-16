@@ -1,0 +1,40 @@
+<form [formGroup]="updateExerciseForm" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+        <label for="name">Name</label>
+        <input autocomplete="off" formControlName="name" id="name" type="text">
+    </div>
+    <div id="muscles" *ngIf="muscles$ | async as muscles">
+        <div class="form-field">
+            <p>Primary Muscles</p>
+            <div formArrayName="primaryMuscles" class="select">
+                <ng-container *ngFor="let muscle of muscles; let i = index">
+                    <label class="option" [for]="'primary' + i">
+                        <input [formControlName]="i" type="checkbox" [id]="'primary' + i">
+                        <span>{{ muscle.name }}</span>
+                    </label>
+                </ng-container>
+            </div>
+        </div>
+        <div class="form-field">
+            <p>Secondary Muscles</p>
+            <div formArrayName="secondaryMuscles" class="select">
+                <ng-container *ngFor="let muscle of muscles; let i = index">
+                    <label class="option" [for]="'secondary' + i">
+                        <input [formControlName]="i" type="checkbox" [id]="'secondary' + i">
+                        <span>{{ muscle.name }}</span>
+                    </label>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="form-field" *ngIf="equipments$ | async as equipments">
+        <label for="equipment">Equipment</label>
+        <select formControlName="equipment" id="equipment">
+            <option [value]="null">None</option>
+            <ng-container *ngFor="let equipment of equipments">
+                <option [value]="equipment.id">{{ equipment.name }}</option>
+            </ng-container>
+        </select>
+    </div>
+    <button type="submit" [disabled]="updateExerciseForm.invalid">Submit</button>
+</form>

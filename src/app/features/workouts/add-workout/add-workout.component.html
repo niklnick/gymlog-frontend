@@ -1,0 +1,17 @@
+<form [formGroup]="addWorkoutForm">
+    <div class="form-field">
+        <label for="name">Name</label>
+        <input autocomplete="off" formControlName="name" id="name" type="text">
+    </div>
+    <div formArrayName="workoutExercises" *ngIf="exercises$ | async as exercises">
+        <p>Workout Exercises</p>
+        <div class="select">
+            <ng-container *ngFor="let exercise of exercises; let i = index">
+                <label class="option" [for]="i">
+                    <input [id]="i" type="checkbox">
+                    <span>{{ exercise.name }}</span>
+                </label>
+            </ng-container>
+        </div>
+    </div>
+</form>
