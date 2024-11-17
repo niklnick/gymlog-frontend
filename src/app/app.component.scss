@@ -1,17 +1,18 @@
 :host {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 4em calc(100% - 4em);
     height: 100%;
     overflow: hidden;
 
     header {
+        align-items: center;
         border-bottom: 1px solid gray;
+        display: flex;
         padding: 8px;
     }
 
     main {
         display: flex;
-        height: 100%;
 
         nav {
             border-right: 1px solid gray;
@@ -45,8 +46,8 @@
         }
 
         article {
-            padding: 8px;
             overflow: auto;
+            padding: 8px;
             width: 100%;
         }
     }
