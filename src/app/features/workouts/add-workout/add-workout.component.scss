@@ -1,5 +1,9 @@
-ul {
-    width: fit-content;
+:host {
+    display: flex;
+
+    form {
+        flex-grow: 1;
+    }
 
     li {
         cursor: pointer;
