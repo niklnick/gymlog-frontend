@@ -6,19 +6,24 @@
     </aside>
 </header>
 <section *ngIf="workouts$ | async as workouts">
-    <div class="workout" *ngFor="let workout of workouts">
-        <h3>{{ workout.name }}</h3>
-        <ol>
-            <ng-container *ngFor="let workoutExercise of workout.workoutExercises">
-                <li>
-                    <p>{{ workoutExercise.exercise.name }}</p>
-                    <p class="sets">
-                        <span>Sets: {{ workoutExercise.sets.length }}</span>
-                        <span>Ø Reps: {{ calculateAverage(workoutExercise, 'reps')}}</span>
-                        <span>Ø Weights: {{ calculateAverage(workoutExercise, 'weightsKg') }} kg</span>
-                    </p>
-                </li>
-            </ng-container>
-        </ol>
-    </div>
+    <ng-container *ngFor="let workout of workouts">
+        <div class="workout" [routerLink]="['update-workout', workout.id]">
+            <header>
+                <h3>{{ workout.name }}</h3>
+                <button (click)="onDelete(workout.id)" type="button">Delete</button>
+            </header>
+            <ol>
+                <ng-container *ngFor="let workoutExercise of workout.workoutExercises">
+                    <li>
+                        <p>{{ workoutExercise.exercise.name }}</p>
+                        <p class="sets">
+                            <span>Sets: {{ workoutExercise.sets.length }}</span>
+                            <span>Ø Reps: {{ calculateAverage(workoutExercise, 'reps')}}</span>
+                            <span>Ø Weights: {{ calculateAverage(workoutExercise, 'weightsKg') }} kg</span>
+                        </p>
+                    </li>
+                </ng-container>
+            </ol>
+        </div>
+    </ng-container>
 </section>

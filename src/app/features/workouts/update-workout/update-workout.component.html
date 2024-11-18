@@ -1,0 +1,50 @@
+<form [formGroup]="updateWorkoutFormGroup" (ngSubmit)="onSubmit()">
+    <legend>Update Workout</legend>
+
+    <div class="form-field">
+        <label for="name">Name</label>
+        <input autocomplete="off" formControlName="name" id="name">
+    </div>
+
+    <fieldset formArrayName="workoutExercises">
+        <legend>Workout Exercises</legend>
+
+        <ng-container *ngFor="let workoutExercisesFormGroup of workoutExercisesFormArray.controls; let i = index">
+            <fieldset [formGroup]="workoutExercisesFormGroup">
+                <legend>{{ i + 1 }}. {{ exercises[i].name }}</legend>
+
+                <ng-container *ngFor="let setsFormGroup of getSetsFormArrayAt(i).controls; let j = index">
+                    <fieldset [formGroup]="setsFormGroup">
+                        <legend>{{ j + 1 }}. Set</legend>
+
+                        <div class="form-field">
+                            <label [for]="'reps' + i + '' + j">Reps</label>
+                            <input formControlName="reps" [id]="'reps' + i + '' + j" type="number">
+                        </div>
+
+                        <div class="form-field">
+                            <label [for]="'weightsKg' + i + '' + j">Weights Kg</label>
+                            <input formControlName="weightsKg" [id]="'weightsKg' + i + '' + j" type="number">
+                        </div>
+
+                        <ng-container *ngIf="this.getSetsFormArrayAt(i).length > 1">
+                            <button (click)="removeSetAt(i, j)" type="button">Remove Set</button>
+                        </ng-container>
+                    </fieldset>
+                </ng-container>
+
+                <button (click)="addSetAt(i)" type="button">Add Set</button>
+                <button (click)="removeWorkoutExerciseAt(i)" type="button">Remove Exercise</button>
+            </fieldset>
+        </ng-container>
+    </fieldset>
+
+    <button (click)="onReset()" type="reset">Reset</button>
+    <button [disabled]="updateWorkoutFormGroup.invalid" type="submit">Submit</button>
+</form>
+
+<ul *ngIf="exercises$ | async as exercises">
+    <ng-container *ngFor="let exercise of exercises">
+        <li (click)="addWorkoutExercise(exercise)">{{ exercise.name }}</li>
+    </ng-container>
+</ul>

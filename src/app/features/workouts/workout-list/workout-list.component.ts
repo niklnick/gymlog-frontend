@@ -29,4 +29,8 @@ export class WorkoutListComponent {
 
     return Math.round(sumReps / workoutExercise.sets.length);
   }
+
+  onDelete(id: string): void {
+    this.workoutStoreService.deleteWorkout(id).subscribe();
+  }
 }

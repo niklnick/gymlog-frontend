@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+
+    form {
+        flex-grow: 1;
+    }
+
+    li {
+        cursor: pointer;
+
+        &:hover {
+            background: hsl(0, 0%, 12.5%);
+        }
+    }
+}

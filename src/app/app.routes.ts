@@ -4,6 +4,7 @@ import { ExerciseListComponent } from './features/exercises/exercise-list/exerci
 import { ExercisesComponent } from './features/exercises/exercises.component';
 import { UpdateExerciseComponent } from './features/exercises/update-exercise/update-exercise.component';
 import { AddWorkoutComponent } from './features/workouts/add-workout/add-workout.component';
+import { UpdateWorkoutComponent } from './features/workouts/update-workout/update-workout.component';
 import { WorkoutListComponent } from './features/workouts/workout-list/workout-list.component';
 import { WorkoutsComponent } from './features/workouts/workouts.component';
 
@@ -37,6 +38,10 @@ export const routes: Routes = [
             {
                 path: 'add-workout',
                 component: AddWorkoutComponent
+            },
+            {
+                path: 'update-workout/:id',
+                component: UpdateWorkoutComponent
             }
         ]
     }

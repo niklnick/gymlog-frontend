@@ -21,6 +21,7 @@
         .workout {
             border: 1px solid gray;
             border-radius: 4px;
+            cursor: pointer;
             padding: 16px;
 
             ol {
@@ -33,6 +34,10 @@
                     gap: 32px;
                     justify-content: space-between;
                 }
+            }
+
+            &:hover {
+                background: hsl(0, 0%, 12.5%);
             }
         }
     }
