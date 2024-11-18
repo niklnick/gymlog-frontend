@@ -20,9 +20,13 @@ export class WorkoutListComponent {
     this.workouts$ = this.workoutStoreService.workouts$;
   }
 
-  formatWorkoutExercises(workoutExercises: WorkoutExercise[]): string {
-    return workoutExercises.map((workoutExercise: WorkoutExercise) => {
-      workoutExercise.exercise.name;
-    }).join(', ');
+  calculateAverage(workoutExercise: WorkoutExercise, setKey: keyof {
+    readonly reps: number;
+    readonly weightsKg: number;
+  }): number {
+    let sumReps: number = 0;
+    workoutExercise.sets.forEach((set) => sumReps += set[setKey]);
+
+    return Math.round(sumReps / workoutExercise.sets.length);
   }
 }
