@@ -16,19 +16,37 @@ import { ExerciseStoreService } from '../../../services/exercise-store.service';
 export class AddWorkoutComponent {
   readonly addWorkoutForm: FormGroup = new FormGroup({
     name: new FormControl<string>('', Validators.required),
-    workoutExercises: new FormArray<typeof this.workoutExerciseForm>([])
-  });
-  readonly workoutExerciseForm: FormGroup = new FormGroup({
-    exercise: new FormControl<string>('', Validators.required),
-    sets: new FormControl(null, Validators.required)
+    workoutExercises: new FormArray<FormGroup>([])
   });
   readonly exercises$: Observable<Exercise[]>;
+  exercises: Exercise[] = [];
 
   constructor(private readonly exerciseStoreService: ExerciseStoreService) {
     this.exercises$ = this.exerciseStoreService.exercises$;
   }
 
-  addWorkoutExercise(): void {
-    (this.addWorkoutForm.get('workoutExercises') as FormArray).push(this.workoutExerciseForm);
+  get workoutExercises(): FormGroup[] {
+    return (this.addWorkoutForm.get('workoutExercises') as FormArray<FormGroup>).controls;
+  }
+
+  getWorkoutExerciseSetsAt(index: number): FormGroup[] {
+    return (this.workoutExercises[index].get('sets') as FormArray<FormGroup>).controls;
+  }
+
+  addWorkoutExercise(exercise: Exercise): void {
+    this.workoutExercises.push(new FormGroup({
+      sets: new FormArray<FormGroup>([
+        new FormGroup({
+          reps: new FormControl<number>(0, Validators.required),
+          weightsKg: new FormControl<number>(0, Validators.required)
+        })
+      ])
+    }));
+    this.exercises.push(exercise);
+  }
+
+  removeWorkoutExerciseAt(index: number): void {
+    (this.addWorkoutForm.get('workoutExercises') as FormArray).removeAt(index);
+    this.exercises = this.exercises.filter((_, i: number) => i !== index);
   }
 }

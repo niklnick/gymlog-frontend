@@ -1,0 +1,11 @@
+ul {
+    width: fit-content;
+
+    li {
+        cursor: pointer;
+
+        &:hover {
+            background: hsl(0, 0%, 12.5%);
+        }
+    }
+}
